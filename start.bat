@@ -1,54 +1,66 @@
 @echo off
-chcp 65001 >nul
 title 股票研究看板
 
-:: ============================================
-::  股票研究看板 - Windows 一键启动脚本
-::  用法：双击此文件即可启动
-:: ============================================
-
-set "PROJECT_DIR=%~dp0"
-
 echo.
-echo  ╔══════════════════════════════════════╗
-echo  ║     📊 股票研究看板 v2.1.0         ║
-echo  ╚══════════════════════════════════════╝
+echo   ╔══════════════════════════════════════╗
+echo   ║     📊 股票研究看板 v2.3.0         ║
+echo   ╚══════════════════════════════════════╝
 echo.
 
-:: 检查 Node.js
+:: ============================================
+:: 步骤1：检查 Node.js
+:: ============================================
+echo   [1/3] 检查 Node.js...
 where node >nul 2>&1
 if %ERRORLEVEL% NEQ 0 (
-    echo  ❌ 未检测到 Node.js，请先安装：https://nodejs.org/
-    echo     推荐安装 LTS 版本（v18 或 v20）
+    echo.
+    echo   ❌ 没有安装 Node.js！
+    echo.
+    echo   请按以下步骤操作：
+    echo   1. 打开浏览器访问 https://nodejs.org
+    echo   2. 下载左边的 LTS 版本
+    echo   3. 安装时一路点"下一步"
+    echo   4. 安装完成后，重新双击 start.bat
+    echo.
     pause
     exit /b 1
 )
+echo   ✅ Node.js 已安装
 
-echo  ✅ Node.js: 
-node -v
+:: ============================================
+:: 步骤2：安装依赖
+:: ============================================
+echo   [2/3] 检查依赖...
+set "PROJECT_DIR=%~dp0"
+cd /d "%PROJECT_DIR%"
 
-:: 检查依赖
-if not exist "%PROJECT_DIR%node_modules" (
-    echo.
-    echo  📦 首次运行，正在安装依赖...
-    cd /d "%PROJECT_DIR%"
-    call npm install --production
+if not exist "node_modules" (
+    echo   首次运行，正在安装依赖（需要联网，约1-2分钟）...
+    call npm install
     if %ERRORLEVEL% NEQ 0 (
-        echo  ❌ 依赖安装失败
+        echo.
+        echo   ❌ 依赖安装失败，请检查网络连接
         pause
         exit /b 1
     )
-    echo  ✅ 依赖安装完成
+    echo   ✅ 依赖安装完成
+) else (
+    echo   ✅ 依赖已就绪
 )
 
-:: 启动服务
+:: ============================================
+:: 步骤3：启动
+:: ============================================
+echo   [3/3] 启动服务器...
 echo.
-echo  🚀 正在启动服务器...
-echo  📍 网站地址: http://localhost:3000
-echo  📋 按 Ctrl+C 停止服务
+echo   ╔══════════════════════════════════════════╗
+echo   ║   🚀 服务启动中...                      ║
+echo   ║   📍 浏览器打开: http://localhost:3000   ║
+echo   ║   🛑 关闭此窗口 = 停止服务               ║
+echo   ╚══════════════════════════════════════════╝
 echo.
 
-cd /d "%PROJECT_DIR%"
+start http://localhost:3000
 npx tsx server/index.ts
 
 pause
