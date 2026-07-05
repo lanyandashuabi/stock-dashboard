@@ -1,6 +1,6 @@
 import { Router, Request, Response } from 'express';
 import { getAllStocks, addStock, deleteStock } from '../db';
-import { formatDisplayCode, getMarket } from '../utils/code-utils';
+import { formatDisplayCode, getMarket, normalizeCode } from '../utils/code-utils';
 
 const router = Router();
 
@@ -18,28 +18,28 @@ router.get('/stock-pool', (_req: Request, res: Response) => {
 // 添加个股
 router.post('/stock-pool', (req: Request, res: Response) => {
   try {
-    const { code, name, industry = '', tags = '' } = req.body;
+    const { code: rawCode, name, industry = '', tags = '' } = req.body;
 
-    if (!code || !name) {
+    if (!rawCode || !name) {
       return res.status(400).json({ success: false, error: '股票代码和名称不能为空' });
     }
 
-    // 代码格式校验
-    const codeRegex = /^\d{5,6}\.(SH|SZ|BJ|HK)$/i;
-    if (!codeRegex.test(code)) {
+    // 使用 normalizeCode 标准化输入
+    const normalized = normalizeCode(rawCode);
+    if (!normalized) {
       return res.status(400).json({
         success: false,
-        error: '代码格式错误，示例：600519.SH / 00700.HK',
+        error: '无法识别代码格式，支持：600519 / 600519.SH / sh600519 / 00700.HK 等',
       });
     }
 
-    const market = getMarket(code);
-    const formattedCode = formatDisplayCode(code);
+    const market = getMarket(normalized);
+    const formattedCode = formatDisplayCode(normalized);
 
     const stock = addStock({
       code: formattedCode,
-      name,
-      market,
+      name: name.trim(),
+      market: market === 'hk' ? 'HK' : 'A',
       industry,
       tags,
       price: 0,

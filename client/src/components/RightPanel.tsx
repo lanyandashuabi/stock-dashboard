@@ -36,34 +36,36 @@ export default function RightPanel() {
   }, []);
 
   return (
-    <div className="w-64 flex flex-col flex-shrink-0" style={{ backgroundColor: '#fff', borderLeft: '1px solid #f0d0d4' }}>
-      <div className="px-4 py-3" style={{ borderBottom: '1px solid #f0d0d4' }}>
-        <h2 className="text-sm font-medium" style={{ color: '#c41e3a' }}>⭐ 重点资产</h2>
+    <div className="w-64 flex flex-col flex-shrink-0" style={{ backgroundColor: 'var(--bg-surface)', borderLeft: '1px solid var(--border-light)' }}>
+      <div className="px-4 py-3" style={{ borderBottom: '1px solid var(--border-light)' }}>
+        <h2 className="text-sm font-semibold text-[var(--color-brand)]">★ 重点资产</h2>
       </div>
 
       <div className="flex-1 overflow-y-auto">
         {loading && assets.every(a => a.price === 0) ? (
-          <div className="p-3 space-y-2">
-            {[1,2,3,4,5].map(i => <div key={i} className="animate-pulse-glow rounded h-12" style={{backgroundColor:'#fef2f2'}} />)}
+          <div className="p-2 space-y-1.5">
+            {[1,2,3,4,5].map(i => (
+              <div key={i} className="skeleton h-14 rounded-lg" />
+            ))}
           </div>
         ) : (
-          <div className="p-1 space-y-0.5">
+          <div className="p-1.5 space-y-0.5">
             {assets.map(asset => (
               <button
                 key={asset.code}
                 onClick={() => openKline(asset.code, asset.name)}
-                className="w-full text-left p-2.5 rounded-lg hover:bg-red-50 transition-colors"
+                className="w-full text-left p-2.5 rounded-lg transition-all duration-150 hover:bg-[var(--bg-surface-hover)] cursor-pointer"
               >
                 <div className="flex items-center justify-between">
-                  <div>
-                    <div className="text-sm font-medium" style={{color:'#1a1a1a'}}>{asset.name}</div>
-                    <div className="text-xs" style={{color:'#999'}}>{asset.note}</div>
+                  <div className="min-w-0">
+                    <div className="text-sm font-medium text-[var(--text-primary)] truncate">{asset.name}</div>
+                    <div className="text-xs text-[var(--text-tertiary)] mt-0.5">{asset.note}</div>
                   </div>
-                  <div className="text-right">
-                    <div className="text-sm font-mono" style={{color:'#1a1a1a'}}>
+                  <div className="text-right ml-3">
+                    <div className="text-sm data-number font-semibold text-[var(--text-primary)]">
                       {asset.price > 0 ? asset.price.toFixed(2) : '--'}
                     </div>
-                    <div className={`text-xs font-mono ${asset.change >= 0 ? 'text-green-500' : ''}`} style={asset.change < 0 ? {color:'#c41e3a'} : {}}>
+                    <div className={`text-xs data-number mt-0.5 ${asset.change >= 0 ? 'text-up' : 'text-down'}`}>
                       {asset.change !== 0 ? `${asset.change >= 0 ? '+' : ''}${asset.changePercent.toFixed(2)}%` : '--'}
                     </div>
                   </div>
@@ -74,11 +76,13 @@ export default function RightPanel() {
         )}
       </div>
 
-      <div className="px-4 py-3" style={{ borderTop: '1px solid #f0d0d4' }}>
-        <div className="text-xs" style={{color:'#999'}}>
+      <div className="px-4 py-3" style={{ borderTop: '1px solid var(--border-light)' }}>
+        <div className="text-xs text-[var(--text-tertiary)]">
           <div className="flex items-center justify-between">
             <span>数据状态</span>
-            <span style={{color:'#22c55e'}}>● 正常</span>
+            <span className="flex items-center gap-1 text-up">
+              <span className="w-1.5 h-1.5 rounded-full bg-[var(--color-up)]" /> 正常
+            </span>
           </div>
         </div>
       </div>

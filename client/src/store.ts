@@ -2,6 +2,22 @@ import { create } from 'zustand';
 
 export type Page = 'macro' | 'industry' | 'stock-pool' | 'watchlist';
 
+function getInitialTheme(): 'light' | 'dark' {
+  try {
+    const saved = localStorage.getItem('stock-dashboard-theme');
+    if (saved === 'dark' || saved === 'light') return saved;
+  } catch {}
+  return 'light';
+}
+
+function applyTheme(theme: 'light' | 'dark') {
+  document.documentElement.setAttribute('data-theme', theme);
+  try { localStorage.setItem('stock-dashboard-theme', theme); } catch {}
+}
+
+// 初始化主题
+applyTheme(getInitialTheme());
+
 interface AppState {
   currentPage: Page;
   setPage: (page: Page) => void;
@@ -28,10 +44,11 @@ export const useAppStore = create<AppState>((set) => ({
   currentPage: 'macro',
   setPage: (page) => set({ currentPage: page }),
 
-  theme: 'light',
+  theme: getInitialTheme(),
   toggleTheme: () =>
     set((s) => {
       const next = s.theme === 'dark' ? 'light' : 'dark';
+      applyTheme(next);
       return { theme: next };
     }),
 

@@ -15,9 +15,9 @@ export default function IndustryPage() {
   }
 
   return (
-    <div className="flex h-full">
+    <div className="flex h-full animate-fade-in">
       {/* 行业标签栏 */}
-      <div className="w-40 border-r border-red-100 p-3 space-y-1">
+      <div className="w-40 flex-shrink-0 p-3 space-y-1" style={{ borderRight: '1px solid var(--border-light)', backgroundColor: 'var(--bg-surface)' }}>
         {industries.map((ind) => (
           <button
             key={ind.key}
@@ -25,33 +25,30 @@ export default function IndustryPage() {
               setActiveIndustry(ind.key);
               setActiveSegment(ind.segments[0]?.name || '');
             }}
-            className={`w-full text-left px-3 py-2.5 rounded-lg text-sm transition-colors ${
-              activeIndustry === ind.key
-                ? 'bg-red-50 text-red-600 font-medium'
-                : '3 hover: hover:bg-white'
-            }`}
+            className={`nav-item text-sm ${activeIndustry === ind.key ? 'active' : ''}`}
           >
-            {ind.icon} {ind.name}
+            <span className="mr-2">{ind.icon}</span>
+            {ind.name}
           </button>
         ))}
       </div>
 
       {/* 详情 */}
       <div className="flex-1 p-6 overflow-y-auto">
-        <h2 className="text-xl font-bold  mb-6">
+        <h2 className="text-xl font-bold text-[var(--text-primary)] mb-6">
           {industry.icon} {industry.name}
         </h2>
 
         {/* 核心驱动 + 催化剂 + 风险 */}
         <div className="grid grid-cols-3 gap-4 mb-6">
-          <CardList title=" 核心驱动" items={industry.drivers} color="blue" />
-          <CardList title="⚡ 近期催化剂" items={industry.catalysts} color="yellow" />
-          <CardList title=" 主要风险" items={industry.risks} color="red" />
+          <CardList title="核心驱动" items={industry.drivers} color="blue" />
+          <CardList title="近期催化剂" items={industry.catalysts} color="yellow" />
+          <CardList title="主要风险" items={industry.risks} color="red" />
         </div>
 
         {/* 产业链 */}
         <div className="mb-6">
-          <h3 className="text-base font-semibold  mb-3">🔗 产业链结构</h3>
+          <h3 className="text-base font-semibold text-[var(--text-primary)] mb-3">产业链结构</h3>
           <div className="grid grid-cols-3 gap-4">
             <ChainColumn title="上游" items={industry.chain.upstream} color="blue" />
             <ChainColumn title="中游" items={industry.chain.midstream} color="purple" />
@@ -61,17 +58,13 @@ export default function IndustryPage() {
 
         {/* 细分板块 */}
         <div>
-          <h3 className="text-base font-semibold  mb-3"> 细分板块</h3>
-          <div className="flex gap-2 mb-4">
+          <h3 className="text-base font-semibold text-[var(--text-primary)] mb-3">细分板块</h3>
+          <div className="flex gap-2 mb-4 flex-wrap">
             {industry.segments.map((seg) => (
               <button
                 key={seg.name}
                 onClick={() => setActiveSegment(seg.name)}
-                className={`px-3 py-1.5 rounded-lg text-xs transition-colors ${
-                  activeSegment === seg.name
-                    ? 'bg-gradient-red '
-                    : 'bg-white 3 hover:'
-                }`}
+                className={`tag-btn ${activeSegment === seg.name ? 'active' : ''}`}
               >
                 {seg.name}
               </button>
@@ -86,10 +79,10 @@ export default function IndustryPage() {
                   <button
                     key={leader.code}
                     onClick={() => openKline(leader.code, leader.name)}
-                    className="bg-white card-shadow border border-red-100 hover:border-blue-500 rounded-lg p-3 text-left transition-colors"
+                    className="card card-clickable p-4 text-left"
                   >
-                    <div className="text-sm text-gray-200">{leader.name}</div>
-                    <div className="text-xs 4 font-mono mt-1">{leader.code}</div>
+                    <div className="text-sm font-medium text-[var(--text-primary)]">{leader.name}</div>
+                    <div className="text-xs data-number text-[var(--text-tertiary)] mt-1">{leader.code}</div>
                   </button>
                 ))}
               </div>
@@ -110,17 +103,18 @@ function CardList({
   color: 'blue' | 'yellow' | 'red';
 }) {
   const borderMap = {
-    blue: 'border-l-blue-500',
-    yellow: 'border-l-yellow-500',
-    red: 'border-l-red-500',
+    blue: 'var(--color-info)',
+    yellow: 'var(--color-warning)',
+    red: 'var(--color-down)',
   };
   return (
-    <div className={`bg-white card-shadow border border-red-100 border-l-4 ${borderMap[color]} rounded-lg p-4`}>
-      <h4 className="text-sm font-medium 2 mb-3">{title}</h4>
+    <div className="card-static p-4" style={{ borderLeft: `3px solid ${borderMap[color]}` }}>
+      <h4 className="text-sm font-semibold text-[var(--text-primary)] mb-3">{title}</h4>
       <ul className="space-y-2">
         {items.map((item, i) => (
-          <li key={i} className="text-xs 3 leading-relaxed">
-            • {item}
+          <li key={i} className="text-xs text-[var(--text-secondary)] leading-relaxed flex gap-1.5">
+            <span className="text-[var(--text-tertiary)] flex-shrink-0">•</span>
+            <span>{item}</span>
           </li>
         ))}
       </ul>
@@ -137,23 +131,25 @@ function ChainColumn({
   items: { name: string; description: string }[];
   color: string;
 }) {
-  const colorMap: Record<string, string> = {
-    blue: 'bg-blue-500/10 border-blue-500/30',
-    purple: 'bg-purple-500/10 border-purple-500/30',
-    green: 'bg-green-500/10 border-green-300',
+  const colorMap: Record<string, { bg: string; border: string }> = {
+    blue: { bg: 'rgba(59,130,246,0.06)', border: 'rgba(59,130,246,0.25)' },
+    purple: { bg: 'rgba(168,85,247,0.06)', border: 'rgba(168,85,247,0.25)' },
+    green: { bg: 'rgba(34,197,94,0.06)', border: 'rgba(34,197,94,0.25)' },
   };
+  const c = colorMap[color] || colorMap.blue;
   return (
     <div>
-      <h4 className="text-sm font-medium 3 mb-2">{title}</h4>
+      <h4 className="text-sm font-medium text-[var(--text-tertiary)] mb-2">{title}</h4>
       <div className="space-y-2">
         {items.map((item, i) => (
           <div
             key={i}
-            className={`${colorMap[color] || ''} border rounded-lg p-3 group relative`}
+            className="rounded-lg p-3 group relative transition-all duration-200 hover:shadow-sm cursor-default"
+            style={{ backgroundColor: c.bg, border: `1px solid ${c.border}` }}
             title={item.description}
           >
-            <div className="text-sm text-gray-200">{item.name}</div>
-            <div className="text-xs 4 mt-1 opacity-0 group-hover:opacity-100 transition-opacity">
+            <div className="text-sm font-medium text-[var(--text-primary)]">{item.name}</div>
+            <div className="text-xs text-[var(--text-secondary)] mt-1 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
               {item.description}
             </div>
           </div>

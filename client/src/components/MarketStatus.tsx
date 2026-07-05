@@ -8,13 +8,12 @@ export default function MarketStatus() {
     return () => clearInterval(timer);
   }, []);
 
-  const colorMap: Record<string, string> = { trading: '#22c55e', 'pre-open': '#f59e0b', 'lunch-break': '#f59e0b', 'after-close': '#999', closed: '#bbb' };
-  const textMap: Record<string, string> = { trading: '交易中', 'pre-open': '盘前', 'lunch-break': '午休', 'after-close': '已收盘', closed: '休市' };
+  const colorMap: Record<string, string> = { trading: '#22c55e', 'pre-open': '#f59e0b', 'lunch-break': '#f59e0b', 'after-close': '#94a3b8', closed: '#64748b' };
 
   return (
     <div className="flex items-center gap-1.5 text-xs text-white/80">
-      <span className="w-1.5 h-1.5 rounded-full animate-pulse" style={{ backgroundColor: colorMap[status] || '#999' }} />
-      <span>{textMap[status] || status}</span>
+      <span className="w-2 h-2 rounded-full animate-pulse" style={{ backgroundColor: colorMap[status] || '#94a3b8' }} />
+      <span className="tracking-wide">{getMarketStatusLabel(status)}</span>
     </div>
   );
 }

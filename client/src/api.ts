@@ -189,3 +189,61 @@ export async function deleteStockPoolItem(
 ): Promise<ApiResponse<void>> {
   return request<void>(`/stock-pool/${id}`, { method: 'DELETE' });
 }
+
+// ---- 股票搜索 ----
+
+export interface StockSearchResult {
+  code: string;
+  name: string;
+  market: string;
+}
+
+export async function searchStock(
+  keyword: string
+): Promise<ApiResponse<StockSearchResult[]>> {
+  return request<StockSearchResult[]>(
+    `/stock-search?keyword=${encodeURIComponent(keyword)}`
+  );
+}
+
+// ---- 行业词条 ----
+
+export interface IndustryTermItem {
+  id: number;
+  name: string;
+  keywords: string;
+  parent_industry: string;
+  created_at: string;
+  updated_at: string;
+}
+
+export async function fetchIndustryTerms(): Promise<ApiResponse<IndustryTermItem[]>> {
+  return request<IndustryTermItem[]>('/industry-terms');
+}
+
+export async function addIndustryTerm(term: {
+  name: string;
+  keywords: string;
+  parent_industry?: string;
+}): Promise<ApiResponse<IndustryTermItem>> {
+  return request<IndustryTermItem>('/industry-terms', {
+    method: 'POST',
+    body: JSON.stringify(term),
+  });
+}
+
+export async function updateIndustryTerm(
+  id: number,
+  term: { name?: string; keywords?: string; parent_industry?: string }
+): Promise<ApiResponse<void>> {
+  return request<void>(`/industry-terms/${id}`, {
+    method: 'PUT',
+    body: JSON.stringify(term),
+  });
+}
+
+export async function deleteIndustryTerm(
+  id: number
+): Promise<ApiResponse<void>> {
+  return request<void>(`/industry-terms/${id}`, { method: 'DELETE' });
+}

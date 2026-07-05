@@ -25,14 +25,14 @@ export default function App() {
   const PageComponent = pages[currentPage] || MacroPage;
 
   return (
-    <div className="h-screen flex flex-col" style={{ backgroundColor: '#fafafa', color: '#1a1a1a' }}>
+    <div className="h-screen flex flex-col" style={{ backgroundColor: 'var(--bg-app)', color: 'var(--text-primary)' }}>
       {/* Top bar */}
-      <div className="h-14 flex items-center justify-between px-5 flex-shrink-0" style={{ background: 'linear-gradient(135deg, #c41e3a, #9b1a2e)', borderBottom: '2px solid #9b1a2e' }}>
+      <div className="topbar h-14 flex items-center justify-between px-5 flex-shrink-0">
         <div className="flex items-center gap-3">
           <img src="/logo.svg" alt="光明宗" className="w-8 h-8" />
           <div className="flex flex-col leading-tight">
-            <span className="text-base font-bold text-white" style={{ fontFamily: '"KaiTi","STKaiti","SimSun",serif', letterSpacing: '0.1em' }}>光明宗</span>
-            <span className="text-[10px] text-red-100 opacity-80">研究看板</span>
+            <span className="text-base font-bold text-white brand-title">光明宗</span>
+            <span className="text-[10px] text-white/70 tracking-wider">研究看板</span>
           </div>
         </div>
         <MarketStatus />

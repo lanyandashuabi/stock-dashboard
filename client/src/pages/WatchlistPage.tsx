@@ -25,7 +25,6 @@ export default function WatchlistPage() {
     const saved = localStorage.getItem('watchlist');
     return saved ? JSON.parse(saved) : DEFAULT_WATCHLIST;
   });
-  const [editingNote, setEditingNote] = useState<string | null>(null);
   const openKline = useAppStore((s) => s.openKline);
 
   useEffect(() => {
@@ -75,57 +74,61 @@ export default function WatchlistPage() {
   };
 
   return (
-    <div className="p-6">
-      <h2 className="text-xl font-bold  mb-6"> 观察清单</h2>
+    <div className="p-6 animate-fade-in">
+      <h2 className="text-xl font-bold text-[var(--text-primary)] mb-6">观察清单</h2>
 
-      <div className="overflow-x-auto">
-        <table className="w-full text-sm">
+      <div className="overflow-x-auto card-static">
+        <table className="data-table">
           <thead>
-            <tr className="text-left 4 border-b border-red-100">
-              <th className="py-3 px-4 font-medium">名称</th>
-              <th className="py-3 px-4 font-medium">代码</th>
-              <th className="py-3 px-4 font-medium text-right">现价</th>
-              <th className="py-3 px-4 font-medium text-right">涨跌</th>
-              <th className="py-3 px-4 font-medium">备注</th>
-              <th className="py-3 px-4 font-medium text-right">预警价</th>
+            <tr>
+              <th>名称</th>
+              <th>代码</th>
+              <th style={{ textAlign: 'right' }}>现价</th>
+              <th style={{ textAlign: 'right' }}>涨跌</th>
+              <th>备注</th>
+              <th style={{ textAlign: 'right' }}>预警价</th>
             </tr>
           </thead>
           <tbody>
             {items.map((item) => (
               <tr
                 key={item.code}
-                className="border-b border-red-100/50 hover:bg-white/30 cursor-pointer transition-colors"
+                className="cursor-pointer"
                 onClick={() => openKline(item.code, item.name)}
               >
-                <td className="py-3 px-4 text-gray-200 font-medium">{item.name}</td>
-                <td className="py-3 px-4 4 font-mono text-xs">{item.code}</td>
-                <td className="py-3 px-4 text-right font-mono text-gray-200">
-                  {item.price > 0 ? item.price.toFixed(2) : '--'}
+                <td>
+                  <span className="font-semibold text-[var(--text-primary)]">{item.name}</span>
                 </td>
-                <td
-                  className={`py-3 px-4 text-right font-mono ${
-                    item.change >= 0 ? 'text-red-400' : 'text-green-400'
-                  }`}
-                >
-                  {item.change !== 0
-                    ? `${item.change >= 0 ? '+' : ''}${item.changePercent.toFixed(2)}%`
-                    : '--'}
+                <td>
+                  <span className="data-number text-xs text-[var(--text-tertiary)]">{item.code}</span>
                 </td>
-                <td className="py-3 px-4" onClick={(e) => e.stopPropagation()}>
+                <td style={{ textAlign: 'right' }}>
+                  <span className="data-number font-medium text-[var(--text-primary)]">
+                    {item.price > 0 ? item.price.toFixed(2) : '--'}
+                  </span>
+                </td>
+                <td style={{ textAlign: 'right' }}>
+                  <span className={`data-number font-medium ${item.change >= 0 ? 'text-up' : 'text-down'}`}>
+                    {item.change !== 0
+                      ? `${item.change >= 0 ? '+' : ''}${item.changePercent.toFixed(2)}%`
+                      : '--'}
+                  </span>
+                </td>
+                <td onClick={(e) => e.stopPropagation()}>
                   <input
                     type="text"
                     value={item.note}
                     onChange={(e) => updateNote(item.code, e.target.value)}
-                    className="bg-transparent 3 text-xs border-b border-red-100 focus:border-blue-500 focus:outline-none w-24"
+                    className="table-input w-28"
                     placeholder="备注"
                   />
                 </td>
-                <td className="py-3 px-4 text-right" onClick={(e) => e.stopPropagation()}>
+                <td style={{ textAlign: 'right' }} onClick={(e) => e.stopPropagation()}>
                   <input
                     type="number"
                     value={item.alertPrice || ''}
                     onChange={(e) => updateAlertPrice(item.code, parseFloat(e.target.value) || 0)}
-                    className="bg-transparent 3 text-xs border-b border-red-100 focus:border-blue-500 focus:outline-none w-20 text-right font-mono"
+                    className="table-input w-20 text-right data-number"
                     placeholder="预警价"
                     step="0.01"
                   />
@@ -136,8 +139,8 @@ export default function WatchlistPage() {
         </table>
       </div>
 
-      <div className="mt-4 text-xs text-gray-600">
-        💡 点击行查看 K 线图 | 直接在表格中编辑备注和预警价 | 数据自动保存
+      <div className="mt-4 text-xs text-[var(--text-tertiary)]">
+        点击行查看 K 线图 · 直接在表格中编辑备注和预警价 · 数据自动保存
       </div>
     </div>
   );

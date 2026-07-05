@@ -92,14 +92,14 @@ export default function KlineModal() {
   const macdData = calcMACD(klines);
 
   const option = {
-    backgroundColor: '#ffffff',
+    backgroundColor: 'transparent',
     animation: false,
     tooltip: {
       trigger: 'axis',
       axisPointer: { type: 'cross' },
-      backgroundColor: '#ffffff',
-      borderColor: '#f0d0d4',
-      textStyle: { color: '#333', fontSize: 12 },
+      backgroundColor: 'var(--bg-elevated)',
+      borderColor: 'var(--border-light)',
+      textStyle: { color: 'var(--text-primary)', fontSize: 12 },
     },
     axisPointer: {
       link: [{ xAxisIndex: 'all' }],
@@ -110,18 +110,18 @@ export default function KlineModal() {
       { left: '8%', right: '2%', top: '83%', height: '12%' },
     ],
     xAxis: [
-      { type: 'category', data: dates, gridIndex: 0, axisLabel: { show: false }, axisLine: { lineStyle: { color: '#f0d0d4' } } },
-      { type: 'category', data: dates, gridIndex: 1, axisLabel: { show: false }, axisLine: { lineStyle: { color: '#f0d0d4' } } },
-      { type: 'category', data: dates, gridIndex: 2, axisLabel: { color: '#999', fontSize: 10 }, axisLine: { lineStyle: { color: '#f0d0d4' } } },
+      { type: 'category', data: dates, gridIndex: 0, axisLabel: { show: false }, axisLine: { lineStyle: { color: 'var(--border-light)' } } },
+      { type: 'category', data: dates, gridIndex: 1, axisLabel: { show: false }, axisLine: { lineStyle: { color: 'var(--border-light)' } } },
+      { type: 'category', data: dates, gridIndex: 2, axisLabel: { color: 'var(--text-tertiary)', fontSize: 10 }, axisLine: { lineStyle: { color: 'var(--border-light)' } } },
     ],
     yAxis: [
-      { type: 'value', gridIndex: 0, scale: true, splitLine: { lineStyle: { color: '#f5f5f5' } }, axisLabel: { color: '#999', fontSize: 10 } },
+      { type: 'value', gridIndex: 0, scale: true, splitLine: { lineStyle: { color: 'var(--border-light)' } }, axisLabel: { color: 'var(--text-tertiary)', fontSize: 10 } },
       { type: 'value', gridIndex: 1, axisLabel: { show: false }, splitLine: { show: false } },
-      { type: 'value', gridIndex: 2, splitLine: { lineStyle: { color: '#f5f5f5' } }, axisLabel: { color: '#999', fontSize: 10 } },
+      { type: 'value', gridIndex: 2, splitLine: { lineStyle: { color: 'var(--border-light)' } }, axisLabel: { color: 'var(--text-tertiary)', fontSize: 10 } },
     ],
     dataZoom: [
       { type: 'inside', xAxisIndex: [0, 1, 2], start: 50, end: 100 },
-      { type: 'slider', xAxisIndex: [0, 1, 2], start: 50, end: 100, height: 20, bottom: 5, borderColor: '#f0d0d4', backgroundColor: '#fafafa', dataBackground: { lineStyle: { color: '#ddd' }, areaStyle: { color: '#f0d0d4' } }, selectedDataBackground: { lineStyle: { color: '#c41e3a' }, areaStyle: { color: '#c41e3a33' } } },
+      { type: 'slider', xAxisIndex: [0, 1, 2], start: 50, end: 100, height: 20, bottom: 5, borderColor: 'var(--border-light)', backgroundColor: 'var(--bg-surface)', dataBackground: { lineStyle: { color: 'var(--border-default)' }, areaStyle: { color: 'var(--border-light)' } }, selectedDataBackground: { lineStyle: { color: '#c41e3a' }, areaStyle: { color: 'rgba(196,30,58,0.2)' } } },
     ],
     series: [
       {
@@ -149,7 +149,7 @@ export default function KlineModal() {
         itemStyle: {
           color: (params: any) => {
             const k = klines[params.dataIndex];
-            return k?.close >= k?.open ? '#22c55e44' : '#ef444444';
+            return k?.close >= k?.open ? 'rgba(34,197,94,0.3)' : 'rgba(239,68,68,0.3)';
           },
         },
       },
@@ -162,42 +162,40 @@ export default function KlineModal() {
         xAxisIndex: 2,
         yAxisIndex: 2,
         itemStyle: {
-          color: (params: any) => (macdData.macd[params.dataIndex] >= 0 ? '#ef444488' : '#22c55e88'),
+          color: (params: any) => (macdData.macd[params.dataIndex] >= 0 ? 'rgba(239,68,68,0.55)' : 'rgba(34,197,94,0.55)'),
         },
       },
     ],
   };
 
+  const periodLabels: Record<string, string> = { day: '日K', week: '周K', month: '月K' };
+
   return (
-    <div
-      ref={overlayRef}
-      onClick={handleOverlayClick}
-      className="fixed inset-0 z-50 bg-black/70 flex items-center justify-center p-4"
-    >
-      <div className="bg-white border border-gray-200 rounded-xl w-full max-w-5xl max-h-[90vh] overflow-hidden flex flex-col shadow-2xl">
+    <div ref={overlayRef} onClick={handleOverlayClick} className="modal-overlay">
+      <div className="modal-panel w-full max-w-5xl max-h-[90vh] overflow-hidden flex flex-col">
         {/* Header */}
-        <div className="flex items-center justify-between px-5 py-3 border-b border-gray-200 bg-gradient-red text-white">
+        <div className="flex items-center justify-between px-5 py-3 topbar">
           <div className="flex items-center gap-3">
             <h3 className="text-lg font-semibold text-white">{name}</h3>
-            <span className="text-sm text-white/70 font-mono">{code}</span>
+            <span className="text-sm text-white/60 data-number">{code}</span>
           </div>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1.5">
             {(['day', 'week', 'month'] as const).map((p) => (
               <button
                 key={p}
                 onClick={() => setPeriod(p)}
-                className={`px-3 py-1 text-xs rounded-md transition-colors ${
+                className={`px-3 py-1.5 text-xs rounded-md font-medium transition-all duration-150 ${
                   period === p
-                    ? 'bg-gradient-red text-white'
-                    : 'bg-gray-100 text-gray-500 hover:text-red-500'
+                    ? 'bg-white/20 text-white shadow-sm'
+                    : 'text-white/60 hover:text-white hover:bg-white/10'
                 }`}
               >
-                {{ day: '日K', week: '周K', month: '月K' }[p]}
+                {periodLabels[p]}
               </button>
             ))}
             <button
               onClick={closeKline}
-              className="ml-3 text-white/70 hover:text-white text-xl leading-none"
+              className="ml-2 w-7 h-7 rounded-full flex items-center justify-center text-white/60 hover:text-white hover:bg-white/10 transition-colors duration-150"
             >
               ✕
             </button>
@@ -205,13 +203,13 @@ export default function KlineModal() {
         </div>
 
         {/* Chart */}
-        <div className="flex-1 min-h-0">
+        <div className="flex-1 min-h-0" style={{ backgroundColor: 'var(--bg-surface)' }}>
           {loading ? (
-            <div className="flex items-center justify-center h-96 text-gray-400">
+            <div className="flex items-center justify-center h-96 text-[var(--text-tertiary)]">
               <span className="animate-pulse-glow">加载中...</span>
             </div>
           ) : error ? (
-            <div className="flex items-center justify-center h-96 text-red-400">{error}</div>
+            <div className="flex items-center justify-center h-96 text-[var(--color-down)]">{error}</div>
           ) : (
             <ReactECharts
               option={option}

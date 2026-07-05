@@ -57,17 +57,14 @@ export default function StockPoolPage() {
       : stocks.filter((s) => s.industry === industryFilter);
 
   return (
-    <div className="p-6">
+    <div className="p-6 animate-fade-in">
       <div className="flex items-center justify-between mb-6">
         <div>
-          <h2 className="text-xl font-bold "> 个股池</h2>
-          <p className="text-sm 4 mt-1">共 {stocks.length} 只股票</p>
+          <h2 className="text-xl font-bold text-[var(--text-primary)]">个股池</h2>
+          <p className="text-sm text-[var(--text-tertiary)] mt-1">共 {stocks.length} 只股票</p>
         </div>
-        <button
-          onClick={() => setShowAdd(true)}
-          className="px-4 py-2 bg-gradient-red hover:opacity-90 rounded-lg text-sm transition-colors"
-        >
-           添加个股
+        <button onClick={() => setShowAdd(true)} className="btn-primary">
+          + 添加个股
         </button>
       </div>
 
@@ -77,11 +74,7 @@ export default function StockPoolPage() {
           <button
             key={ind}
             onClick={() => setIndustryFilter(ind)}
-            className={`px-3 py-1.5 rounded-lg text-xs transition-colors ${
-              industryFilter === ind
-                ? 'bg-gradient-red '
-                : 'bg-white 3 hover:'
-            }`}
+            className={`tag-btn ${industryFilter === ind ? 'active' : ''}`}
           >
             {ind}
           </button>
@@ -92,7 +85,7 @@ export default function StockPoolPage() {
       {loading && stocks.length === 0 ? (
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
           {[1, 2, 3, 4, 5, 6, 7, 8].map((i) => (
-            <div key={i} className="animate-pulse-glow bg-white rounded-lg h-28" />
+            <div key={i} className="skeleton h-28 rounded-lg" />
           ))}
         </div>
       ) : (
@@ -106,7 +99,7 @@ export default function StockPoolPage() {
             return (
               <div
                 key={stock.id}
-                className="bg-white card-shadow border border-red-100 hover:border-blue-500/50 rounded-lg p-4 relative group cursor-pointer transition-colors"
+                className="card card-clickable p-4 relative group"
                 onClick={() => openKline(stock.code, stock.name)}
               >
                 {/* 删除按钮 */}
@@ -116,34 +109,28 @@ export default function StockPoolPage() {
                       e.stopPropagation();
                       handleDelete(stock);
                     }}
-                    className="absolute top-2 right-2 text-gray-600 hover:text-red-400 text-sm opacity-0 group-hover:opacity-100 transition-opacity"
+                    className="absolute top-2.5 right-2.5 w-6 h-6 rounded-full flex items-center justify-center text-[var(--text-tertiary)] hover:text-[var(--color-down)] hover:bg-red-50 text-xs opacity-0 group-hover:opacity-100 transition-all duration-150"
                     title="删除"
                   >
-                    
+                    ✕
                   </button>
                 )}
 
                 <div className="flex items-start justify-between">
-                  <div>
-                    <div className="text-sm font-medium text-gray-200">{stock.name}</div>
-                    <div className="text-xs 4 font-mono mt-0.5">{stock.code}</div>
+                  <div className="min-w-0">
+                    <div className="text-sm font-semibold text-[var(--text-primary)] truncate">{stock.name}</div>
+                    <div className="text-xs data-number text-[var(--text-tertiary)] mt-0.5">{stock.code}</div>
                   </div>
                   {stock.industry && (
-                    <span className="text-xs bg-red-50 px-2 py-0.5 rounded 3">
-                      {stock.industry}
-                    </span>
+                    <span className="badge flex-shrink-0 ml-2">{stock.industry}</span>
                   )}
                 </div>
 
                 <div className="mt-3 flex items-baseline justify-between">
-                  <span className="text-lg font-mono font-bold ">
+                  <span className="text-lg data-number font-bold text-[var(--text-primary)]">
                     {price > 0 ? price.toFixed(2) : '--'}
                   </span>
-                  <span
-                    className={`text-sm font-mono ${
-                      change >= 0 ? 'text-red-400' : 'text-green-400'
-                    }`}
-                  >
+                  <span className={`text-sm data-number font-medium ${change >= 0 ? 'text-up' : 'text-down'}`}>
                     {change !== 0
                       ? `${change >= 0 ? '+' : ''}${changePercent.toFixed(2)}%`
                       : '--'}

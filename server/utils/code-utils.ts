@@ -91,3 +91,48 @@ export function formatDisplayCode(code: string): string {
 
   return code;
 }
+
+/**
+ * 标准化任意输入的股票代码
+ * 支持格式：
+ *   - 600519, 600519.SH, sh600519, SH600519
+ *   - 00700, 00700.HK, hk00700
+ *   - 000858, 000858.SZ, sz000858
+ *   - 300750, 300750.SZ
+ * 返回标准化格式 "XXXXXX.XX" 或 null
+ */
+export function normalizeCode(input: string): string | null {
+  if (!input || typeof input !== 'string') return null;
+
+  const clean = input.trim().toUpperCase().replace(/[\s\-_]+/g, '');
+
+  if (!clean) return null;
+
+  // 1. 已经是标准格式 600519.SH
+  let match = clean.match(/^(\d{5,6})\.(SH|SZ|BJ|HK)$/);
+  if (match) return `${match[1]}.${match[2]}`;
+
+  // 2. 新浪格式 sh600519 / SZ000858 / bj430047
+  match = clean.match(/^(SH|SZ|BJ)(\d{6})$/);
+  if (match) return `${match[2]}.${match[1]}`;
+
+  // 3. 港股格式 hk00700 / HK00700
+  match = clean.match(/^(HK)(\d{5})$/);
+  if (match) return `${match[2]}.${match[1]}`;
+
+  // 4. 纯数字 6 位 → A 股
+  match = clean.match(/^(\d{6})$/);
+  if (match) {
+    const num = match[1];
+    if (num.startsWith('6')) return `${num}.SH`;
+    if (num.startsWith('4') || num.startsWith('8')) return `${num}.BJ`;
+    return `${num}.SZ`;
+  }
+
+  // 5. 纯数字 5 位 → 港股
+  match = clean.match(/^(\d{5})$/);
+  if (match) return `${match[1]}.HK`;
+
+  // 6. 美股/其他格式暂不支持
+  return null;
+}

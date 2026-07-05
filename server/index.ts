@@ -13,6 +13,8 @@ import realtimeRouter from './routes/realtime';
 import stockPoolRouter from './routes/stock-pool';
 import sectorFlowRouter from './routes/sector-flow';
 import researchRouter from './routes/research';
+import stockSearchRouter from './routes/stock-search';
+import industryTermsRouter from './routes/industry-terms';
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -38,6 +40,8 @@ app.use('/api', realtimeRouter);
 app.use('/api', stockPoolRouter);
 app.use('/api', sectorFlowRouter);
 app.use('/api', researchRouter);
+app.use('/api', stockSearchRouter);
+app.use('/api', industryTermsRouter);
 
 // 健康检查
 app.get('/api/health', (_req, res) => {
