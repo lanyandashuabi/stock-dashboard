@@ -109,14 +109,14 @@ export default function MacroPage() {
       {/* Header */}
       <div className="flex items-center justify-between mb-6">
         <div>
-          <h2 className="text-xl font-bold ">🌐 宏观数据</h2>
+          <h2 className="text-xl font-bold "> 宏观数据</h2>
           <p className="text-sm 4 mt-1">
             {lastUpdate ? `上次更新: ${lastUpdate} (北京时间)` : '加载中...'}
             {isFallback && (
-              <span className="text-yellow-600 ml-2">⚠ 实时数据获取失败，使用缓存数据</span>
+              <span className="text-yellow-600 ml-2"> 实时数据获取失败，使用缓存数据</span>
             )}
             {error && !isFallback && (
-              <span className="text-red-400 ml-2">⚠ {error}</span>
+              <span className="text-red-400 ml-2"> {error}</span>
             )}
           </p>
         </div>
@@ -125,12 +125,12 @@ export default function MacroPage() {
           disabled={loading}
           className="px-4 py-2 bg-gradient-red hover:opacity-90 disabled:opacity-50 rounded-lg text-sm transition-colors"
         >
-          {loading ? '刷新中...' : '🔄 刷新'}
+          {loading ? '刷新中...' : ' 刷新'}
         </button>
       </div>
 
       {/* 实时市场 */}
-      <Section title="📊 实时市场">
+      <Section title=" 实时市场">
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-7 gap-3">
           {indices.map((idx) => (
             <div key={idx.code} className="bg-white card-shadow border border-red-100 rounded-lg p-3">
@@ -173,7 +173,7 @@ export default function MacroPage() {
       </Section>
 
       {/* ===== 行业轮动与资金方向监控（新增） ===== */}
-      <Section title="🔄 行业轮动与资金方向">
+      <Section title=" 行业轮动与资金方向">
         {sectorLoading && !sectorData ? (
           <div className="grid grid-cols-4 gap-3">
             {[1,2,3,4,5,6,7,8].map(i => (
@@ -198,13 +198,13 @@ export default function MacroPage() {
                   </div>
                 </div>
                 <div className="bg-white card-shadow border border-red-300 rounded-lg p-3">
-                  <div className="text-xs 3">🔥 最热板块</div>
+                  <div className="text-xs 3"> 最热板块</div>
                   <div className="text-base font-bold text-red-400 mt-1">
                     {sectorData.summary.hottestSector}
                   </div>
                 </div>
                 <div className="bg-white card-shadow border border-green-300 rounded-lg p-3">
-                  <div className="text-xs 3">❄️ 最冷板块</div>
+                  <div className="text-xs 3">️ 最冷板块</div>
                   <div className="text-base font-bold text-green-400 mt-1">
                     {sectorData.summary.coldestSector}
                   </div>
@@ -257,14 +257,14 @@ export default function MacroPage() {
             </div>
 
             {sectorData?._fallback && (
-              <p className="text-xs text-yellow-600 mt-2">⚠ 行业资金数据为静态回退，非实时</p>
+              <p className="text-xs text-yellow-600 mt-2"> 行业资金数据为静态回退，非实时</p>
             )}
           </>
         )}
       </Section>
 
       {/* 宏观经济 */}
-      <Section title="📈 宏观经济">
+      <Section title=" 宏观经济">
         <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
           {economy.map((item) => (
             <div key={item.name} className="bg-white card-shadow border border-red-100 rounded-lg p-3">
@@ -281,7 +281,7 @@ export default function MacroPage() {
 
       {/* 货币政策 + 全球市场 并排 */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-6">
-        <Section title="🏦 货币政策" compact>
+        <Section title=" 货币政策" compact>
           <div className="space-y-2">
             {monetary.map((item) => (
               <div
@@ -301,7 +301,7 @@ export default function MacroPage() {
           </div>
         </Section>
 
-        <Section title="🌍 全球市场" compact>
+        <Section title=" 全球市场" compact>
           <div className="space-y-2">
             {global.map((item) => (
               <div

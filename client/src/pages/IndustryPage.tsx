@@ -44,9 +44,9 @@ export default function IndustryPage() {
 
         {/* 核心驱动 + 催化剂 + 风险 */}
         <div className="grid grid-cols-3 gap-4 mb-6">
-          <CardList title="📈 核心驱动" items={industry.drivers} color="blue" />
+          <CardList title=" 核心驱动" items={industry.drivers} color="blue" />
           <CardList title="⚡ 近期催化剂" items={industry.catalysts} color="yellow" />
-          <CardList title="⚠ 主要风险" items={industry.risks} color="red" />
+          <CardList title=" 主要风险" items={industry.risks} color="red" />
         </div>
 
         {/* 产业链 */}
@@ -61,7 +61,7 @@ export default function IndustryPage() {
 
         {/* 细分板块 */}
         <div>
-          <h3 className="text-base font-semibold  mb-3">📊 细分板块</h3>
+          <h3 className="text-base font-semibold  mb-3"> 细分板块</h3>
           <div className="flex gap-2 mb-4">
             {industry.segments.map((seg) => (
               <button

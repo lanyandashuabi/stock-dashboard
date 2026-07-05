@@ -60,14 +60,14 @@ export default function StockPoolPage() {
     <div className="p-6">
       <div className="flex items-center justify-between mb-6">
         <div>
-          <h2 className="text-xl font-bold ">📈 个股池</h2>
+          <h2 className="text-xl font-bold "> 个股池</h2>
           <p className="text-sm 4 mt-1">共 {stocks.length} 只股票</p>
         </div>
         <button
           onClick={() => setShowAdd(true)}
           className="px-4 py-2 bg-gradient-red hover:opacity-90 rounded-lg text-sm transition-colors"
         >
-          ➕ 添加个股
+           添加个股
         </button>
       </div>
 
@@ -119,7 +119,7 @@ export default function StockPoolPage() {
                     className="absolute top-2 right-2 text-gray-600 hover:text-red-400 text-sm opacity-0 group-hover:opacity-100 transition-opacity"
                     title="删除"
                   >
-                    🗑
+                    
                   </button>
                 )}
 

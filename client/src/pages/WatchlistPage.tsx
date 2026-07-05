@@ -76,7 +76,7 @@ export default function WatchlistPage() {
 
   return (
     <div className="p-6">
-      <h2 className="text-xl font-bold  mb-6">👁 观察清单</h2>
+      <h2 className="text-xl font-bold  mb-6"> 观察清单</h2>
 
       <div className="overflow-x-auto">
         <table className="w-full text-sm">

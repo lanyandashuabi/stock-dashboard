@@ -8,7 +8,8 @@ import MacroPage from './pages/MacroPage';
 import IndustryPage from './pages/IndustryPage';
 import StockPoolPage from './pages/StockPoolPage';
 import WatchlistPage from './pages/WatchlistPage';
-import ResearchModal from './components/ResearchModal';
+import ResearchPanel from './components/ResearchModal';
+import ResearchButton from './components/ResearchButton';
 import { useAppStore } from './store';
 
 const pages: Record<string, React.FC> = {
@@ -16,6 +17,7 @@ const pages: Record<string, React.FC> = {
   industry: IndustryPage,
   'stock-pool': StockPoolPage,
   watchlist: WatchlistPage,
+  research: ResearchPanel,
 };
 
 export default function App() {
@@ -25,14 +27,15 @@ export default function App() {
   return (
     <div className="h-screen flex flex-col" style={{ backgroundColor: '#fafafa', color: '#1a1a1a' }}>
       {/* Top bar */}
-      <div className="h-12 flex items-center justify-between px-4 flex-shrink-0 bg-gradient-red shadow-md" style={{ borderBottom: '2px solid #9b1a2e' }}>
+      <div className="h-14 flex items-center justify-between px-5 flex-shrink-0" style={{ background: 'linear-gradient(135deg, #c41e3a, #9b1a2e)', borderBottom: '2px solid #9b1a2e' }}>
         <div className="flex items-center gap-3">
-          <span className="text-xl font-bold text-white tracking-wider" style={{ fontFamily: '"KaiTi", "STKaiti", serif' }}>光明宗</span>
-          <span className="text-xs text-red-100 opacity-80">股票研究看板 v2.4</span>
+          <img src="/logo.svg" alt="光明宗" className="w-8 h-8" />
+          <div className="flex flex-col leading-tight">
+            <span className="text-base font-bold text-white" style={{ fontFamily: '"KaiTi","STKaiti","SimSun",serif', letterSpacing: '0.1em' }}>光明宗</span>
+            <span className="text-[10px] text-red-100 opacity-80">研究看板</span>
+          </div>
         </div>
-        <div className="flex items-center gap-4">
-          <MarketStatus />
-        </div>
+        <MarketStatus />
       </div>
 
       {/* Main */}
@@ -46,7 +49,7 @@ export default function App() {
 
       <KlineModal />
       <SettingsModal />
-      <ResearchModal />
+      <ResearchButton />
     </div>
   );
 }

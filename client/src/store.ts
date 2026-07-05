@@ -17,10 +17,6 @@ interface AppState {
   openSettings: () => void;
   closeSettings: () => void;
 
-  researchOpen: boolean;
-  openResearch: () => void;
-  closeResearch: () => void;
-
   refreshInterval: number;
   setRefreshInterval: (interval: number) => void;
 
@@ -46,10 +42,6 @@ export const useAppStore = create<AppState>((set) => ({
   settingsOpen: false,
   openSettings: () => set({ settingsOpen: true }),
   closeSettings: () => set({ settingsOpen: false }),
-
-  researchOpen: false,
-  openResearch: () => set({ researchOpen: true }),
-  closeResearch: () => set({ researchOpen: false }),
 
   refreshInterval: 30,
   setRefreshInterval: (interval) => set({ refreshInterval: interval }),

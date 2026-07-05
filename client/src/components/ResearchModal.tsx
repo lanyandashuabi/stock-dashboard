@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import { useAppStore } from '../store';
 
 interface ExtractedInfo {
   summary: string;
@@ -8,17 +7,14 @@ interface ExtractedInfo {
   riskWarnings: string[];
 }
 
-export default function ResearchModal() {
-  const { researchOpen, closeResearch } = useAppStore();
+export default function ResearchPanel() {
   const [input, setInput] = useState('');
   const [analyzing, setAnalyzing] = useState(false);
   const [result, setResult] = useState<ExtractedInfo | null>(null);
   const [error, setError] = useState('');
 
-  if (!researchOpen) return null;
-
   const handleAnalyze = async () => {
-    if (!input.trim()) { setError('请输入研报内容'); return; }
+    if (!input.trim()) { setError('请粘贴研报内容'); return; }
     setAnalyzing(true);
     setError('');
 
@@ -42,9 +38,10 @@ export default function ResearchModal() {
 
   const handleUpdateStockPool = async () => {
     if (!result?.stocks.length) return;
+    let ok = 0, fail = 0;
     for (const stock of result.stocks) {
       try {
-        await fetch('/api/stock-pool', {
+        const r = await fetch('/api/stock-pool', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
@@ -54,116 +51,143 @@ export default function ResearchModal() {
             tags: stock.reason || '',
           }),
         });
-      } catch {}
+        const d = await r.json();
+        if (d.success) ok++; else fail++;
+      } catch { fail++; }
     }
-    alert('已尝试添加个股到个股池（已存在的会跳过）');
+    alert(`添加完成：成功 ${ok}，失败/已存在 ${fail}`);
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center" style={{ backgroundColor: 'rgba(0,0,0,0.5)' }} onClick={closeResearch}>
-      <div className="rounded-xl w-full max-w-3xl max-h-[90vh] overflow-hidden flex flex-col shadow-2xl" style={{ backgroundColor: '#fff' }} onClick={e => e.stopPropagation()}>
-        {/* Header */}
-        <div className="flex items-center justify-between px-5 py-3 bg-gradient-red text-white">
-          <div className="flex items-center gap-2">
-            <span className="text-lg">📋</span>
-            <h3 className="text-lg font-bold">研报智能分析</h3>
-          </div>
-          <button onClick={closeResearch} className="text-white/80 hover:text-white text-xl leading-none">✕</button>
+    <div className="p-8 max-w-4xl mx-auto">
+      {/* 标题 */}
+      <div className="mb-6">
+        <h2 className="text-2xl font-bold flex items-center gap-2" style={{ color: '#1a1a1a' }}>
+          <span style={{ color: '#c41e3a' }}>🔍</span>
+          研报智能分析
+        </h2>
+        <p className="mt-2 text-sm" style={{ color: '#666' }}>
+          粘贴研报/新闻/会议纪要内容，AI 自动提取股票、行业、催化剂、风险，一键更新到个股池和行业板块
+        </p>
+      </div>
+
+      {/* 输入区 */}
+      <div className="rounded-xl p-5 mb-4" style={{ backgroundColor: '#fff', border: '1px solid #f0d0d4', boxShadow: '0 1px 3px rgba(196,30,58,0.06)' }}>
+        <textarea
+          value={input}
+          onChange={e => setInput(e.target.value)}
+          placeholder="在此粘贴研报内容..."
+          rows={8}
+          className="w-full rounded-lg p-3 text-sm resize-y focus:outline-none"
+          style={{ border: '1px solid #f0d0d4', backgroundColor: '#fefefe', color: '#333' }}
+        />
+
+        <div className="flex gap-3 mt-3">
+          <button
+            onClick={handleAnalyze}
+            disabled={analyzing}
+            className="px-5 py-2 text-white rounded-lg text-sm font-medium hover:opacity-90 disabled:opacity-50 transition-opacity flex items-center gap-1.5"
+            style={{ backgroundColor: '#c41e3a' }}
+          >
+            <span>🔍</span>
+            <span>{analyzing ? '分析中...' : '开始分析'}</span>
+          </button>
+          <button
+            onClick={() => { setInput(''); setResult(null); setError(''); }}
+            className="px-5 py-2 text-sm rounded-lg transition-colors"
+            style={{ border: '1px solid #f0d0d4', color: '#666' }}
+          >清空</button>
         </div>
+        {error && <div className="mt-2 text-sm" style={{ color: '#c41e3a' }}>{error}</div>}
+      </div>
 
-        <div className="p-5 overflow-y-auto flex-1">
-          {/* 输入区 */}
-          <div className="mb-4">
-            <label className="block text-sm font-medium mb-2" style={{ color: '#666' }}>
-              粘贴券商研报内容，AI 自动提取关键信息
-            </label>
-            <textarea
-              value={input}
-              onChange={e => setInput(e.target.value)}
-              placeholder="粘贴券商研报内容，AI 自动提取关键信息"
-              rows={6}
-              className="w-full rounded-lg p-3 text-sm resize-none focus:outline-none"
-              style={{ border: '1px solid #f0d0d4', backgroundColor: '#fefefe' }}
-            />
-            <div className="flex gap-2 mt-2">
-              <button
-                onClick={handleAnalyze}
-                disabled={analyzing}
-                className="px-4 py-2 bg-gradient-red text-white rounded-lg text-sm font-medium hover:opacity-90 disabled:opacity-50 transition-opacity"
-              >
-                {analyzing ? '⏳ 分析中...' : '🔍 智能分析'}
-              </button>
-              <button
-                onClick={() => { setInput(''); setResult(null); setError(''); }}
-                className="px-4 py-2 text-sm rounded-lg transition-colors"
-                style={{ border: '1px solid #f0d0d4', color: '#999' }}
-              >清空</button>
-            </div>
-            {error && <div className="mt-2 text-sm text-red-500">{error}</div>}
+      {/* 提示列表 */}
+      <div className="rounded-xl p-5 mb-6" style={{ backgroundColor: '#fef9f9', border: '1px dashed #f0d0d4' }}>
+        <div className="text-sm font-medium mb-2" style={{ color: '#1a1a1a' }}>支持自动识别：</div>
+        <ul className="text-sm space-y-1.5" style={{ color: '#666' }}>
+          <li>• 股票代码和名称（如：寒武纪(688256)、贵州茅台(600519.SH)）</li>
+          <li>• 行业标签（AI算力/机器人/创新药/油运/半导体/新能源）</li>
+          <li>• 催化剂和风险句子</li>
+          <li>• 产业链上下游信息</li>
+        </ul>
+      </div>
+
+      {/* 分析结果 */}
+      {result && (
+        <div className="space-y-4">
+          {/* 核心摘要 */}
+          <div className="rounded-xl p-5" style={{ backgroundColor: '#fff', border: '1px solid #f0d0d4' }}>
+            <h4 className="text-base font-bold mb-2 flex items-center gap-1.5" style={{ color: '#c41e3a' }}>
+              <span>📝</span><span>核心摘要</span>
+            </h4>
+            <p className="text-sm leading-relaxed" style={{ color: '#333' }}>{result.summary}</p>
           </div>
 
-          {/* 分析结果 */}
-          {result && (
-            <div className="space-y-4">
-              {/* 核心摘要 */}
-              <div className="p-4 rounded-lg" style={{ backgroundColor: '#fef2f2', border: '1px solid #f0d0d4' }}>
-                <h4 className="text-sm font-bold mb-2" style={{ color: '#c41e3a' }}>📝 核心摘要</h4>
-                <p className="text-sm leading-relaxed" style={{ color: '#333' }}>{result.summary}</p>
+          {/* 涉及个股 */}
+          {result.stocks.length > 0 && (
+            <div className="rounded-xl p-5" style={{ backgroundColor: '#fff', border: '1px solid #f0d0d4' }}>
+              <div className="flex items-center justify-between mb-3">
+                <h4 className="text-base font-bold flex items-center gap-1.5" style={{ color: '#c41e3a' }}>
+                  <span>📈</span><span>涉及个股</span>
+                </h4>
+                <button
+                  onClick={handleUpdateStockPool}
+                  className="px-4 py-1.5 text-white rounded text-xs hover:opacity-90"
+                  style={{ backgroundColor: '#c41e3a' }}
+                >一键加入个股池</button>
               </div>
-
-              {/* 涉及个股 */}
-              {result.stocks.length > 0 && (
-                <div>
-                  <div className="flex items-center justify-between mb-2">
-                    <h4 className="text-sm font-bold" style={{ color: '#c41e3a' }}>📈 涉及个股</h4>
-                    <button
-                      onClick={handleUpdateStockPool}
-                      className="px-3 py-1 bg-gradient-red text-white rounded text-xs hover:opacity-90"
-                    >一键加入个股池</button>
+              <div className="space-y-2">
+                {result.stocks.map((s, i) => (
+                  <div key={i} className="flex items-center justify-between p-3 rounded-lg" style={{ border: '1px solid #f0d0d4' }}>
+                    <div className="flex items-center gap-3">
+                      <span className="text-sm font-medium" style={{ color: '#1a1a1a' }}>{s.name}</span>
+                      <span className="text-xs font-mono" style={{ color: '#999' }}>{s.code}</span>
+                    </div>
+                    <span className="text-xs px-2.5 py-1 rounded" style={{ backgroundColor: '#fef2f2', color: '#c41e3a' }}>
+                      {s.action} · {s.reason}
+                    </span>
                   </div>
-                  <div className="space-y-1">
-                    {result.stocks.map((s, i) => (
-                      <div key={i} className="flex items-center justify-between p-2.5 rounded-lg" style={{ border: '1px solid #f0d0d4' }}>
-                        <div>
-                          <span className="text-sm font-medium" style={{ color: '#1a1a1a' }}>{s.name}</span>
-                          <span className="text-xs ml-2 font-mono" style={{ color: '#999' }}>{s.code}</span>
-                        </div>
-                        <span className="text-xs px-2 py-0.5 rounded" style={{ backgroundColor: '#fef2f2', color: '#c41e3a' }}>
-                          {s.action} · {s.reason}
-                        </span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
+                ))}
+              </div>
+            </div>
+          )}
 
-              {/* 行业更新 */}
-              {result.industryUpdates.length > 0 && (
-                <div>
-                  <h4 className="text-sm font-bold mb-2" style={{ color: '#c41e3a' }}>🏭 行业影响</h4>
-                  <div className="space-y-1">
-                    {result.industryUpdates.map((u, i) => (
-                      <div key={i} className="p-2.5 rounded-lg text-sm" style={{ border: '1px solid #f0d0d4', color: '#333' }}>
-                        <span className="font-medium">{u.industry}：</span>{u.content}
-                      </div>
-                    ))}
+          {/* 行业影响 */}
+          {result.industryUpdates.length > 0 && (
+            <div className="rounded-xl p-5" style={{ backgroundColor: '#fff', border: '1px solid #f0d0d4' }}>
+              <h4 className="text-base font-bold mb-3 flex items-center gap-1.5" style={{ color: '#c41e3a' }}>
+                <span>🏭</span><span>行业影响</span>
+              </h4>
+              <div className="space-y-2">
+                {result.industryUpdates.map((u, i) => (
+                  <div key={i} className="p-3 rounded-lg text-sm" style={{ border: '1px solid #f0d0d4', color: '#333' }}>
+                    <span className="font-medium" style={{ color: '#c41e3a' }}>{u.industry}：</span>{u.content}
                   </div>
-                </div>
-              )}
+                ))}
+              </div>
+            </div>
+          )}
 
-              {/* 风险提示 */}
-              {result.riskWarnings.length > 0 && (
-                <div className="p-3 rounded-lg" style={{ backgroundColor: '#fff8f0', border: '1px solid #f5d0a0' }}>
-                  <h4 className="text-sm font-bold mb-1" style={{ color: '#b8860b' }}>⚠ 风险提示</h4>
-                  {result.riskWarnings.map((r, i) => (
-                    <div key={i} className="text-xs" style={{ color: '#8b6914' }}>• {r}</div>
-                  ))}
-                </div>
-              )}
+          {/* 风险提示 */}
+          {result.riskWarnings.length > 0 && (
+            <div className="rounded-xl p-5" style={{ backgroundColor: '#fff8f0', border: '1px solid #f5d0a0' }}>
+              <h4 className="text-base font-bold mb-2 flex items-center gap-1.5" style={{ color: '#b8860b' }}>
+                <span>⚠</span><span>风险提示</span>
+              </h4>
+              {result.riskWarnings.map((r, i) => (
+                <div key={i} className="text-sm" style={{ color: '#8b6914' }}>• {r}</div>
+              ))}
+            </div>
+          )}
+
+          {/* 无识别结果 */}
+          {result.stocks.length === 0 && result.industryUpdates.length === 0 && (
+            <div className="rounded-xl p-5 text-center text-sm" style={{ backgroundColor: '#fafafa', border: '1px solid #f0d0d4', color: '#999' }}>
+              未识别到具体个股或行业信息。请尝试粘贴更详细的研报内容。
             </div>
           )}
         </div>
-      </div>
+      )}
     </div>
   );
 }
