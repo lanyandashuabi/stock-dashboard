@@ -1,0 +1,22 @@
+{
+  "apps": [
+    {
+      "name": "stock-dashboard",
+      "script": "npx",
+      "args": "tsx server/index.ts",
+      "cwd": "/workspace/stock-dashboard",
+      "interpreter": "none",
+      "env": {
+        "NODE_ENV": "production",
+        "PORT": "3000"
+      },
+      "autorestart": true,
+      "max_restarts": 10,
+      "restart_delay": 5000,
+      "error_file": "/workspace/stock-dashboard/logs/error.log",
+      "out_file": "/workspace/stock-dashboard/logs/out.log",
+      "log_date_format": "YYYY-MM-DD HH:mm:ss",
+      "max_memory_restart": "500M"
+    }
+  ]
+}

@@ -1,0 +1,11 @@
+[Desktop Entry]
+Name=股票研究看板
+Name[zh_CN]=股票研究看板
+Comment=个人股票复盘网站 - A股/港股研究看板
+Comment[zh_CN]=个人股票复盘网站 - A股/港股研究看板
+Exec=bash /workspace/stock-dashboard/start.sh
+Icon=/workspace/stock-dashboard/client/public/favicon.svg
+Terminal=true
+Type=Application
+Categories=Finance;Office;
+StartupNotify=true

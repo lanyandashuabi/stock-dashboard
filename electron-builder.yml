@@ -1,0 +1,52 @@
+{
+  "$schema": "https://raw.githubusercontent.com/electron-userland/electron-builder/master/packages/app-builder-lib/scheme.json",
+  "appId": "com.stockdashboard.app",
+  "productName": "股票研究看板",
+  "directories": {
+    "output": "release"
+  },
+  "files": [
+    "dist/**/*",
+    "server/**/*",
+    "data/**/*",
+    "electron/**/*",
+    "node_modules/**/*",
+    "package.json",
+    "tsconfig.json"
+  ],
+  "extraResources": [
+    {
+      "from": "data",
+      "to": "data"
+    }
+  ],
+  "win": {
+    "target": [
+      {
+        "target": "nsis",
+        "arch": ["x64"]
+      }
+    ],
+    "icon": "client/public/favicon.svg",
+    "artifactName": "${productName}-Setup-${version}.${ext}"
+  },
+  "nsis": {
+    "oneClick": false,
+    "perMachine": false,
+    "allowToChangeInstallationDirectory": true,
+    "createDesktopShortcut": true,
+    "shortcutName": "股票研究看板",
+    "installerIcon": "client/public/favicon.svg",
+    "uninstallerIcon": "client/public/favicon.svg"
+  },
+  "mac": {
+    "target": ["dmg"],
+    "icon": "client/public/favicon.svg",
+    "artifactName": "${productName}-${version}.${ext}"
+  },
+  "linux": {
+    "target": ["AppImage", "deb"],
+    "icon": "client/public/favicon.svg",
+    "artifactName": "${productName}-${version}.${ext}"
+  }
+}

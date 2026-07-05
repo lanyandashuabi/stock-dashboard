@@ -1,0 +1,43 @@
+@import "tailwindcss";
+
+@theme {
+  --color-dashboard-bg: #0f172a;
+  --color-dashboard-card: #1e293b;
+  --color-dashboard-border: #334155;
+  --color-dashboard-accent: #3b82f6;
+  --color-dashboard-up: #22c55e;
+  --color-dashboard-down: #ef4444;
+  --color-dashboard-text: #e2e8f0;
+  --color-dashboard-muted: #94a3b8;
+}
+
+body {
+  background-color: var(--color-dashboard-bg);
+  color: var(--color-dashboard-text);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+/* 自定义滚动条 */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--color-dashboard-border);
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #475569;
+}
+
+/* 加载动画 */
+@keyframes pulse-glow {
+  0%, 100% { opacity: 0.4; }
+  50% { opacity: 1; }
+}
+.animate-pulse-glow {
+  animation: pulse-glow 1.5s ease-in-out infinite;
+}
