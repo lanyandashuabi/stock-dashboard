@@ -1,43 +1,52 @@
 @import "tailwindcss";
 
-@theme {
-  --color-dashboard-bg: #0f172a;
-  --color-dashboard-card: #1e293b;
-  --color-dashboard-border: #334155;
-  --color-dashboard-accent: #3b82f6;
-  --color-dashboard-up: #22c55e;
-  --color-dashboard-down: #ef4444;
-  --color-dashboard-text: #e2e8f0;
-  --color-dashboard-muted: #94a3b8;
+/* ===== 光明宗 — 红白金融配色 ===== */
+
+:root {
+  --primary-red: #c41e3a;
+  --primary-red-light: #e8394a;
+  --primary-red-dark: #9b1a2e;
+  --primary-gold: #b8860b;
+  --bg-white: #fafafa;
+  --bg-card: #ffffff;
+  --bg-hover: #fef2f2;
+  --border-color: #f0d0d4;
+  --text-primary: #1a1a1a;
+  --text-secondary: #666666;
+  --text-muted: #999999;
+  --green-up: #22c55e;
+  --red-down: #c41e3a;
 }
 
 body {
-  background-color: var(--color-dashboard-bg);
-  color: var(--color-dashboard-text);
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background-color: var(--bg-white);
+  color: var(--text-primary);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'PingFang SC', 'Microsoft YaHei', sans-serif;
 }
 
-/* 自定义滚动条 */
-::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
-}
-::-webkit-scrollbar-track {
-  background: transparent;
-}
-::-webkit-scrollbar-thumb {
-  background: var(--color-dashboard-border);
-  border-radius: 3px;
-}
-::-webkit-scrollbar-thumb:hover {
-  background: #475569;
-}
+/* 滚动条 */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: #f5f5f5; }
+::-webkit-scrollbar-thumb { background: #d4d4d4; border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: #bbb; }
 
-/* 加载动画 */
 @keyframes pulse-glow {
   0%, 100% { opacity: 0.4; }
   50% { opacity: 1; }
 }
 .animate-pulse-glow {
   animation: pulse-glow 1.5s ease-in-out infinite;
+}
+
+/* 自定义渐变 */
+.bg-gradient-red {
+  background: linear-gradient(135deg, var(--primary-red), var(--primary-red-dark));
+}
+
+/* 卡片阴影 */
+.card-shadow {
+  box-shadow: 0 1px 3px rgba(196, 30, 58, 0.08), 0 1px 2px rgba(196, 30, 58, 0.04);
+}
+.card-shadow:hover {
+  box-shadow: 0 4px 12px rgba(196, 30, 58, 0.12);
 }

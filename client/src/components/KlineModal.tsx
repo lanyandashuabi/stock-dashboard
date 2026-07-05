@@ -92,14 +92,14 @@ export default function KlineModal() {
   const macdData = calcMACD(klines);
 
   const option = {
-    backgroundColor: '#0f172a',
+    backgroundColor: '#ffffff',
     animation: false,
     tooltip: {
       trigger: 'axis',
       axisPointer: { type: 'cross' },
-      backgroundColor: '#1e293b',
-      borderColor: '#334155',
-      textStyle: { color: '#e2e8f0', fontSize: 12 },
+      backgroundColor: '#ffffff',
+      borderColor: '#f0d0d4',
+      textStyle: { color: '#333', fontSize: 12 },
     },
     axisPointer: {
       link: [{ xAxisIndex: 'all' }],
@@ -110,18 +110,18 @@ export default function KlineModal() {
       { left: '8%', right: '2%', top: '83%', height: '12%' },
     ],
     xAxis: [
-      { type: 'category', data: dates, gridIndex: 0, axisLabel: { show: false }, axisLine: { lineStyle: { color: '#334155' } } },
-      { type: 'category', data: dates, gridIndex: 1, axisLabel: { show: false }, axisLine: { lineStyle: { color: '#334155' } } },
-      { type: 'category', data: dates, gridIndex: 2, axisLabel: { color: '#64748b', fontSize: 10 }, axisLine: { lineStyle: { color: '#334155' } } },
+      { type: 'category', data: dates, gridIndex: 0, axisLabel: { show: false }, axisLine: { lineStyle: { color: '#f0d0d4' } } },
+      { type: 'category', data: dates, gridIndex: 1, axisLabel: { show: false }, axisLine: { lineStyle: { color: '#f0d0d4' } } },
+      { type: 'category', data: dates, gridIndex: 2, axisLabel: { color: '#999', fontSize: 10 }, axisLine: { lineStyle: { color: '#f0d0d4' } } },
     ],
     yAxis: [
-      { type: 'value', gridIndex: 0, scale: true, splitLine: { lineStyle: { color: '#1e293b' } }, axisLabel: { color: '#64748b', fontSize: 10 } },
+      { type: 'value', gridIndex: 0, scale: true, splitLine: { lineStyle: { color: '#f5f5f5' } }, axisLabel: { color: '#999', fontSize: 10 } },
       { type: 'value', gridIndex: 1, axisLabel: { show: false }, splitLine: { show: false } },
-      { type: 'value', gridIndex: 2, splitLine: { lineStyle: { color: '#1e293b' } }, axisLabel: { color: '#64748b', fontSize: 10 } },
+      { type: 'value', gridIndex: 2, splitLine: { lineStyle: { color: '#f5f5f5' } }, axisLabel: { color: '#999', fontSize: 10 } },
     ],
     dataZoom: [
       { type: 'inside', xAxisIndex: [0, 1, 2], start: 50, end: 100 },
-      { type: 'slider', xAxisIndex: [0, 1, 2], start: 50, end: 100, height: 20, bottom: 5, borderColor: '#334155', backgroundColor: '#1e293b', dataBackground: { lineStyle: { color: '#475569' }, areaStyle: { color: '#334155' } }, selectedDataBackground: { lineStyle: { color: '#3b82f6' }, areaStyle: { color: '#3b82f6' } } },
+      { type: 'slider', xAxisIndex: [0, 1, 2], start: 50, end: 100, height: 20, bottom: 5, borderColor: '#f0d0d4', backgroundColor: '#fafafa', dataBackground: { lineStyle: { color: '#ddd' }, areaStyle: { color: '#f0d0d4' } }, selectedDataBackground: { lineStyle: { color: '#c41e3a' }, areaStyle: { color: '#c41e3a33' } } },
     ],
     series: [
       {
@@ -174,12 +174,12 @@ export default function KlineModal() {
       onClick={handleOverlayClick}
       className="fixed inset-0 z-50 bg-black/70 flex items-center justify-center p-4"
     >
-      <div className="bg-gray-900 border border-gray-700 rounded-xl w-full max-w-5xl max-h-[90vh] overflow-hidden flex flex-col">
+      <div className="bg-white border border-gray-200 rounded-xl w-full max-w-5xl max-h-[90vh] overflow-hidden flex flex-col shadow-2xl">
         {/* Header */}
-        <div className="flex items-center justify-between px-5 py-3 border-b border-gray-800">
+        <div className="flex items-center justify-between px-5 py-3 border-b border-gray-200 bg-gradient-red text-white">
           <div className="flex items-center gap-3">
             <h3 className="text-lg font-semibold text-white">{name}</h3>
-            <span className="text-sm text-gray-500 font-mono">{code}</span>
+            <span className="text-sm text-white/70 font-mono">{code}</span>
           </div>
           <div className="flex items-center gap-2">
             {(['day', 'week', 'month'] as const).map((p) => (
@@ -188,8 +188,8 @@ export default function KlineModal() {
                 onClick={() => setPeriod(p)}
                 className={`px-3 py-1 text-xs rounded-md transition-colors ${
                   period === p
-                    ? 'bg-blue-600 text-white'
-                    : 'bg-gray-800 text-gray-400 hover:text-white'
+                    ? 'bg-gradient-red text-white'
+                    : 'bg-gray-100 text-gray-500 hover:text-red-500'
                 }`}
               >
                 {{ day: '日K', week: '周K', month: '月K' }[p]}
@@ -197,7 +197,7 @@ export default function KlineModal() {
             ))}
             <button
               onClick={closeKline}
-              className="ml-3 text-gray-400 hover:text-white text-xl leading-none"
+              className="ml-3 text-white/70 hover:text-white text-xl leading-none"
             >
               ✕
             </button>

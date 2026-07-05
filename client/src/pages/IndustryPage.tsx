@@ -17,7 +17,7 @@ export default function IndustryPage() {
   return (
     <div className="flex h-full">
       {/* 行业标签栏 */}
-      <div className="w-40 border-r border-gray-800 p-3 space-y-1">
+      <div className="w-40 border-r border-red-100 p-3 space-y-1">
         {industries.map((ind) => (
           <button
             key={ind.key}
@@ -27,8 +27,8 @@ export default function IndustryPage() {
             }}
             className={`w-full text-left px-3 py-2.5 rounded-lg text-sm transition-colors ${
               activeIndustry === ind.key
-                ? 'bg-blue-600/20 text-blue-400 font-medium'
-                : 'text-gray-400 hover:text-white hover:bg-gray-800'
+                ? 'bg-red-50 text-red-600 font-medium'
+                : '3 hover: hover:bg-white'
             }`}
           >
             {ind.icon} {ind.name}
@@ -38,7 +38,7 @@ export default function IndustryPage() {
 
       {/* 详情 */}
       <div className="flex-1 p-6 overflow-y-auto">
-        <h2 className="text-xl font-bold text-white mb-6">
+        <h2 className="text-xl font-bold  mb-6">
           {industry.icon} {industry.name}
         </h2>
 
@@ -51,7 +51,7 @@ export default function IndustryPage() {
 
         {/* 产业链 */}
         <div className="mb-6">
-          <h3 className="text-base font-semibold text-white mb-3">🔗 产业链结构</h3>
+          <h3 className="text-base font-semibold  mb-3">🔗 产业链结构</h3>
           <div className="grid grid-cols-3 gap-4">
             <ChainColumn title="上游" items={industry.chain.upstream} color="blue" />
             <ChainColumn title="中游" items={industry.chain.midstream} color="purple" />
@@ -61,7 +61,7 @@ export default function IndustryPage() {
 
         {/* 细分板块 */}
         <div>
-          <h3 className="text-base font-semibold text-white mb-3">📊 细分板块</h3>
+          <h3 className="text-base font-semibold  mb-3">📊 细分板块</h3>
           <div className="flex gap-2 mb-4">
             {industry.segments.map((seg) => (
               <button
@@ -69,8 +69,8 @@ export default function IndustryPage() {
                 onClick={() => setActiveSegment(seg.name)}
                 className={`px-3 py-1.5 rounded-lg text-xs transition-colors ${
                   activeSegment === seg.name
-                    ? 'bg-blue-600 text-white'
-                    : 'bg-gray-800 text-gray-400 hover:text-white'
+                    ? 'bg-gradient-red '
+                    : 'bg-white 3 hover:'
                 }`}
               >
                 {seg.name}
@@ -86,10 +86,10 @@ export default function IndustryPage() {
                   <button
                     key={leader.code}
                     onClick={() => openKline(leader.code, leader.name)}
-                    className="bg-gray-800/50 border border-gray-700 hover:border-blue-500 rounded-lg p-3 text-left transition-colors"
+                    className="bg-white card-shadow border border-red-100 hover:border-blue-500 rounded-lg p-3 text-left transition-colors"
                   >
                     <div className="text-sm text-gray-200">{leader.name}</div>
-                    <div className="text-xs text-gray-500 font-mono mt-1">{leader.code}</div>
+                    <div className="text-xs 4 font-mono mt-1">{leader.code}</div>
                   </button>
                 ))}
               </div>
@@ -115,11 +115,11 @@ function CardList({
     red: 'border-l-red-500',
   };
   return (
-    <div className={`bg-gray-800/50 border border-gray-700 border-l-4 ${borderMap[color]} rounded-lg p-4`}>
-      <h4 className="text-sm font-medium text-gray-300 mb-3">{title}</h4>
+    <div className={`bg-white card-shadow border border-red-100 border-l-4 ${borderMap[color]} rounded-lg p-4`}>
+      <h4 className="text-sm font-medium 2 mb-3">{title}</h4>
       <ul className="space-y-2">
         {items.map((item, i) => (
-          <li key={i} className="text-xs text-gray-400 leading-relaxed">
+          <li key={i} className="text-xs 3 leading-relaxed">
             • {item}
           </li>
         ))}
@@ -140,11 +140,11 @@ function ChainColumn({
   const colorMap: Record<string, string> = {
     blue: 'bg-blue-500/10 border-blue-500/30',
     purple: 'bg-purple-500/10 border-purple-500/30',
-    green: 'bg-green-500/10 border-green-500/30',
+    green: 'bg-green-500/10 border-green-300',
   };
   return (
     <div>
-      <h4 className="text-sm font-medium text-gray-400 mb-2">{title}</h4>
+      <h4 className="text-sm font-medium 3 mb-2">{title}</h4>
       <div className="space-y-2">
         {items.map((item, i) => (
           <div
@@ -153,7 +153,7 @@ function ChainColumn({
             title={item.description}
           >
             <div className="text-sm text-gray-200">{item.name}</div>
-            <div className="text-xs text-gray-500 mt-1 opacity-0 group-hover:opacity-100 transition-opacity">
+            <div className="text-xs 4 mt-1 opacity-0 group-hover:opacity-100 transition-opacity">
               {item.description}
             </div>
           </div>

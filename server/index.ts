@@ -12,6 +12,7 @@ import klineRouter from './routes/kline';
 import realtimeRouter from './routes/realtime';
 import stockPoolRouter from './routes/stock-pool';
 import sectorFlowRouter from './routes/sector-flow';
+import researchRouter from './routes/research';
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -36,6 +37,7 @@ app.use('/api', klineRouter);
 app.use('/api', realtimeRouter);
 app.use('/api', stockPoolRouter);
 app.use('/api', sectorFlowRouter);
+app.use('/api', researchRouter);
 
 // 健康检查
 app.get('/api/health', (_req, res) => {

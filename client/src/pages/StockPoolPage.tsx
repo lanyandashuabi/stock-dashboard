@@ -60,12 +60,12 @@ export default function StockPoolPage() {
     <div className="p-6">
       <div className="flex items-center justify-between mb-6">
         <div>
-          <h2 className="text-xl font-bold text-white">📈 个股池</h2>
-          <p className="text-sm text-gray-500 mt-1">共 {stocks.length} 只股票</p>
+          <h2 className="text-xl font-bold ">📈 个股池</h2>
+          <p className="text-sm 4 mt-1">共 {stocks.length} 只股票</p>
         </div>
         <button
           onClick={() => setShowAdd(true)}
-          className="px-4 py-2 bg-blue-600 hover:bg-blue-700 rounded-lg text-sm transition-colors"
+          className="px-4 py-2 bg-gradient-red hover:opacity-90 rounded-lg text-sm transition-colors"
         >
           ➕ 添加个股
         </button>
@@ -79,8 +79,8 @@ export default function StockPoolPage() {
             onClick={() => setIndustryFilter(ind)}
             className={`px-3 py-1.5 rounded-lg text-xs transition-colors ${
               industryFilter === ind
-                ? 'bg-blue-600 text-white'
-                : 'bg-gray-800 text-gray-400 hover:text-white'
+                ? 'bg-gradient-red '
+                : 'bg-white 3 hover:'
             }`}
           >
             {ind}
@@ -92,7 +92,7 @@ export default function StockPoolPage() {
       {loading && stocks.length === 0 ? (
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
           {[1, 2, 3, 4, 5, 6, 7, 8].map((i) => (
-            <div key={i} className="animate-pulse-glow bg-gray-800 rounded-lg h-28" />
+            <div key={i} className="animate-pulse-glow bg-white rounded-lg h-28" />
           ))}
         </div>
       ) : (
@@ -106,7 +106,7 @@ export default function StockPoolPage() {
             return (
               <div
                 key={stock.id}
-                className="bg-gray-800/50 border border-gray-700 hover:border-blue-500/50 rounded-lg p-4 relative group cursor-pointer transition-colors"
+                className="bg-white card-shadow border border-red-100 hover:border-blue-500/50 rounded-lg p-4 relative group cursor-pointer transition-colors"
                 onClick={() => openKline(stock.code, stock.name)}
               >
                 {/* 删除按钮 */}
@@ -126,17 +126,17 @@ export default function StockPoolPage() {
                 <div className="flex items-start justify-between">
                   <div>
                     <div className="text-sm font-medium text-gray-200">{stock.name}</div>
-                    <div className="text-xs text-gray-500 font-mono mt-0.5">{stock.code}</div>
+                    <div className="text-xs 4 font-mono mt-0.5">{stock.code}</div>
                   </div>
                   {stock.industry && (
-                    <span className="text-xs bg-gray-700 px-2 py-0.5 rounded text-gray-400">
+                    <span className="text-xs bg-red-50 px-2 py-0.5 rounded 3">
                       {stock.industry}
                     </span>
                   )}
                 </div>
 
                 <div className="mt-3 flex items-baseline justify-between">
-                  <span className="text-lg font-mono font-bold text-white">
+                  <span className="text-lg font-mono font-bold ">
                     {price > 0 ? price.toFixed(2) : '--'}
                   </span>
                   <span

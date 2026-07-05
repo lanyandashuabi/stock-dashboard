@@ -77,10 +77,10 @@ export default function MacroPage() {
     return (
       <div className="p-6">
         <div className="animate-pulse-glow space-y-6">
-          <div className="h-8 bg-gray-800 rounded w-48" />
+          <div className="h-8 bg-white rounded w-48" />
           <div className="grid grid-cols-7 gap-3">
             {[1,2,3,4,5,6,7].map(i => (
-              <div key={i} className="h-24 bg-gray-800 rounded-lg" />
+              <div key={i} className="h-24 bg-white rounded-lg" />
             ))}
           </div>
         </div>
@@ -109,11 +109,11 @@ export default function MacroPage() {
       {/* Header */}
       <div className="flex items-center justify-between mb-6">
         <div>
-          <h2 className="text-xl font-bold text-white">🌐 宏观数据</h2>
-          <p className="text-sm text-gray-500 mt-1">
+          <h2 className="text-xl font-bold ">🌐 宏观数据</h2>
+          <p className="text-sm 4 mt-1">
             {lastUpdate ? `上次更新: ${lastUpdate} (北京时间)` : '加载中...'}
             {isFallback && (
-              <span className="text-yellow-500 ml-2">⚠ 实时数据获取失败，使用缓存数据</span>
+              <span className="text-yellow-600 ml-2">⚠ 实时数据获取失败，使用缓存数据</span>
             )}
             {error && !isFallback && (
               <span className="text-red-400 ml-2">⚠ {error}</span>
@@ -123,7 +123,7 @@ export default function MacroPage() {
         <button
           onClick={() => { loadMacro(); loadSectorFlow(); }}
           disabled={loading}
-          className="px-4 py-2 bg-blue-600 hover:bg-blue-700 disabled:bg-blue-800 rounded-lg text-sm transition-colors"
+          className="px-4 py-2 bg-gradient-red hover:opacity-90 disabled:opacity-50 rounded-lg text-sm transition-colors"
         >
           {loading ? '刷新中...' : '🔄 刷新'}
         </button>
@@ -133,9 +133,9 @@ export default function MacroPage() {
       <Section title="📊 实时市场">
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-7 gap-3">
           {indices.map((idx) => (
-            <div key={idx.code} className="bg-gray-800/50 border border-gray-700 rounded-lg p-3">
-              <div className="text-xs text-gray-400 mb-1">{idx.name}</div>
-              <div className="text-lg font-mono font-bold text-white">{formatPrice(idx.price)}</div>
+            <div key={idx.code} className="bg-white card-shadow border border-red-100 rounded-lg p-3">
+              <div className="text-xs 3 mb-1">{idx.name}</div>
+              <div className="text-lg font-mono font-bold ">{formatPrice(idx.price)}</div>
               <div
                 className={`text-sm font-mono ${
                   idx.change >= 0 ? 'text-red-400' : 'text-green-400'
@@ -149,22 +149,22 @@ export default function MacroPage() {
 
         {/* 市场情绪 */}
         <div className="grid grid-cols-2 gap-3 mt-4">
-          <div className="bg-gray-800/50 border border-gray-700 rounded-lg p-3">
-            <div className="text-xs text-gray-400">
+          <div className="bg-white card-shadow border border-red-100 rounded-lg p-3">
+            <div className="text-xs 3">
               {sentiment?.northBound?.label || '北向资金'}
             </div>
-            <div className="text-lg font-mono font-bold text-white mt-1">
+            <div className="text-lg font-mono font-bold  mt-1">
               {sentiment?.northBound?.value || '--'}
             </div>
             <div className="text-xs text-gray-600 mt-1">
               {sentiment?.northBound?.note || ''}
             </div>
           </div>
-          <div className="bg-gray-800/50 border border-gray-700 rounded-lg p-3">
-            <div className="text-xs text-gray-400">两市成交额</div>
-            <div className="text-lg font-mono font-bold text-white mt-1">
+          <div className="bg-white card-shadow border border-red-100 rounded-lg p-3">
+            <div className="text-xs 3">两市成交额</div>
+            <div className="text-lg font-mono font-bold  mt-1">
               {sentiment?.totalAmount?.value || '--'}
-              <span className="text-sm text-gray-500 ml-1">
+              <span className="text-sm 4 ml-1">
                 {sentiment?.totalAmount?.unit || '亿'}
               </span>
             </div>
@@ -177,7 +177,7 @@ export default function MacroPage() {
         {sectorLoading && !sectorData ? (
           <div className="grid grid-cols-4 gap-3">
             {[1,2,3,4,5,6,7,8].map(i => (
-              <div key={i} className="animate-pulse-glow bg-gray-800 rounded-lg h-16" />
+              <div key={i} className="animate-pulse-glow bg-white rounded-lg h-16" />
             ))}
           </div>
         ) : (
@@ -185,26 +185,26 @@ export default function MacroPage() {
             {/* 资金总览 */}
             {sectorData && (
               <div className="grid grid-cols-4 gap-3 mb-4">
-                <div className="bg-gray-800/50 border border-gray-700 rounded-lg p-3">
-                  <div className="text-xs text-gray-400">主力净流入</div>
+                <div className="bg-white card-shadow border border-red-100 rounded-lg p-3">
+                  <div className="text-xs 3">主力净流入</div>
                   <div className="text-lg font-mono font-bold text-red-400">
                     +{sectorData.summary.totalInflow.toFixed(1)}亿
                   </div>
                 </div>
-                <div className="bg-gray-800/50 border border-gray-700 rounded-lg p-3">
-                  <div className="text-xs text-gray-400">主力净流出</div>
+                <div className="bg-white card-shadow border border-red-100 rounded-lg p-3">
+                  <div className="text-xs 3">主力净流出</div>
                   <div className="text-lg font-mono font-bold text-green-400">
                     -{sectorData.summary.totalOutflow.toFixed(1)}亿
                   </div>
                 </div>
-                <div className="bg-gray-800/50 border border-red-500/30 rounded-lg p-3">
-                  <div className="text-xs text-gray-400">🔥 最热板块</div>
+                <div className="bg-white card-shadow border border-red-300 rounded-lg p-3">
+                  <div className="text-xs 3">🔥 最热板块</div>
                   <div className="text-base font-bold text-red-400 mt-1">
                     {sectorData.summary.hottestSector}
                   </div>
                 </div>
-                <div className="bg-gray-800/50 border border-green-500/30 rounded-lg p-3">
-                  <div className="text-xs text-gray-400">❄️ 最冷板块</div>
+                <div className="bg-white card-shadow border border-green-300 rounded-lg p-3">
+                  <div className="text-xs 3">❄️ 最冷板块</div>
                   <div className="text-base font-bold text-green-400 mt-1">
                     {sectorData.summary.coldestSector}
                   </div>
@@ -217,8 +217,8 @@ export default function MacroPage() {
               {(sectorData?.sectors || []).map((sector) => (
                 <div
                   key={sector.code}
-                  className={`bg-gray-800/50 border rounded-lg p-3 ${
-                    sector.netFlow > 0 ? 'border-red-500/20' : 'border-green-500/20'
+                  className={`bg-white card-shadow border rounded-lg p-3 ${
+                    sector.netFlow > 0 ? 'border-red-200' : 'border-green-200'
                   }`}
                 >
                   <div className="flex items-center justify-between mb-1">
@@ -232,7 +232,7 @@ export default function MacroPage() {
                     </span>
                   </div>
                   <div className="flex items-center justify-between">
-                    <span className="text-xs text-gray-500">主力资金</span>
+                    <span className="text-xs 4">主力资金</span>
                     <span
                       className={`text-xs font-mono font-medium ${
                         sector.netFlow >= 0 ? 'text-red-400' : 'text-green-400'
@@ -242,7 +242,7 @@ export default function MacroPage() {
                     </span>
                   </div>
                   {/* 资金流向条 */}
-                  <div className="mt-2 h-1 bg-gray-700 rounded-full overflow-hidden">
+                  <div className="mt-2 h-1 bg-red-50 rounded-full overflow-hidden">
                     <div
                       className={`h-full rounded-full transition-all ${
                         sector.netFlow >= 0 ? 'bg-red-500' : 'bg-green-500'
@@ -257,7 +257,7 @@ export default function MacroPage() {
             </div>
 
             {sectorData?._fallback && (
-              <p className="text-xs text-yellow-500 mt-2">⚠ 行业资金数据为静态回退，非实时</p>
+              <p className="text-xs text-yellow-600 mt-2">⚠ 行业资金数据为静态回退，非实时</p>
             )}
           </>
         )}
@@ -267,9 +267,9 @@ export default function MacroPage() {
       <Section title="📈 宏观经济">
         <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
           {economy.map((item) => (
-            <div key={item.name} className="bg-gray-800/50 border border-gray-700 rounded-lg p-3">
-              <div className="text-xs text-gray-400">{item.name}</div>
-              <div className="text-lg font-mono font-bold text-white mt-1">{item.value}</div>
+            <div key={item.name} className="bg-white card-shadow border border-red-100 rounded-lg p-3">
+              <div className="text-xs 3">{item.name}</div>
+              <div className="text-lg font-mono font-bold  mt-1">{item.value}</div>
               <div className="text-xs text-gray-600 mt-1">
                 更新: {item.date} | 来源: {item.source}
               </div>
@@ -286,14 +286,14 @@ export default function MacroPage() {
             {monetary.map((item) => (
               <div
                 key={item.name}
-                className="flex items-center justify-between bg-gray-800/50 border border-gray-700 rounded-lg p-3"
+                className="flex items-center justify-between bg-white card-shadow border border-red-100 rounded-lg p-3"
               >
                 <div>
-                  <div className="text-sm text-gray-300">{item.name}</div>
+                  <div className="text-sm 2">{item.name}</div>
                   <div className="text-xs text-gray-600">下次: {item.nextMeeting}</div>
                 </div>
                 <div>
-                  <div className="text-lg font-mono font-bold text-white">{item.value}</div>
+                  <div className="text-lg font-mono font-bold ">{item.value}</div>
                   <div className="text-xs text-gray-600 text-right">{item.date}</div>
                 </div>
               </div>
@@ -306,18 +306,18 @@ export default function MacroPage() {
             {global.map((item) => (
               <div
                 key={item.name}
-                className="flex items-center justify-between bg-gray-800/50 border border-gray-700 rounded-lg p-3"
+                className="flex items-center justify-between bg-white card-shadow border border-red-100 rounded-lg p-3"
               >
                 <div>
-                  <div className="text-sm text-gray-300">{item.name}</div>
+                  <div className="text-sm 2">{item.name}</div>
                   {item.nextMeeting && (
                     <div className="text-xs text-gray-600">下次: {item.nextMeeting}</div>
                   )}
                 </div>
                 <div>
-                  <div className="text-lg font-mono font-bold text-white">
+                  <div className="text-lg font-mono font-bold ">
                     {item.value}
-                    {item.unit && <span className="text-xs text-gray-500 ml-1">{item.unit}</span>}
+                    {item.unit && <span className="text-xs 4 ml-1">{item.unit}</span>}
                   </div>
                   <div className="text-xs text-gray-600 text-right">{item.date}</div>
                 </div>
@@ -342,14 +342,14 @@ function Section({
   if (compact) {
     return (
       <div>
-        <h3 className="text-base font-semibold text-white mb-3">{title}</h3>
+        <h3 className="text-base font-semibold  mb-3">{title}</h3>
         {children}
       </div>
     );
   }
   return (
     <div className="mt-6">
-      <h3 className="text-base font-semibold text-white mb-3">{title}</h3>
+      <h3 className="text-base font-semibold  mb-3">{title}</h3>
       {children}
     </div>
   );

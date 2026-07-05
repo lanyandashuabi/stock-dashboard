@@ -76,12 +76,12 @@ export default function WatchlistPage() {
 
   return (
     <div className="p-6">
-      <h2 className="text-xl font-bold text-white mb-6">👁 观察清单</h2>
+      <h2 className="text-xl font-bold  mb-6">👁 观察清单</h2>
 
       <div className="overflow-x-auto">
         <table className="w-full text-sm">
           <thead>
-            <tr className="text-left text-gray-500 border-b border-gray-800">
+            <tr className="text-left 4 border-b border-red-100">
               <th className="py-3 px-4 font-medium">名称</th>
               <th className="py-3 px-4 font-medium">代码</th>
               <th className="py-3 px-4 font-medium text-right">现价</th>
@@ -94,11 +94,11 @@ export default function WatchlistPage() {
             {items.map((item) => (
               <tr
                 key={item.code}
-                className="border-b border-gray-800/50 hover:bg-gray-800/30 cursor-pointer transition-colors"
+                className="border-b border-red-100/50 hover:bg-white/30 cursor-pointer transition-colors"
                 onClick={() => openKline(item.code, item.name)}
               >
                 <td className="py-3 px-4 text-gray-200 font-medium">{item.name}</td>
-                <td className="py-3 px-4 text-gray-500 font-mono text-xs">{item.code}</td>
+                <td className="py-3 px-4 4 font-mono text-xs">{item.code}</td>
                 <td className="py-3 px-4 text-right font-mono text-gray-200">
                   {item.price > 0 ? item.price.toFixed(2) : '--'}
                 </td>
@@ -116,7 +116,7 @@ export default function WatchlistPage() {
                     type="text"
                     value={item.note}
                     onChange={(e) => updateNote(item.code, e.target.value)}
-                    className="bg-transparent text-gray-400 text-xs border-b border-gray-700 focus:border-blue-500 focus:outline-none w-24"
+                    className="bg-transparent 3 text-xs border-b border-red-100 focus:border-blue-500 focus:outline-none w-24"
                     placeholder="备注"
                   />
                 </td>
@@ -125,7 +125,7 @@ export default function WatchlistPage() {
                     type="number"
                     value={item.alertPrice || ''}
                     onChange={(e) => updateAlertPrice(item.code, parseFloat(e.target.value) || 0)}
-                    className="bg-transparent text-gray-400 text-xs border-b border-gray-700 focus:border-blue-500 focus:outline-none w-20 text-right font-mono"
+                    className="bg-transparent 3 text-xs border-b border-red-100 focus:border-blue-500 focus:outline-none w-20 text-right font-mono"
                     placeholder="预警价"
                     step="0.01"
                   />

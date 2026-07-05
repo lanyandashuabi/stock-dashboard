@@ -8,6 +8,7 @@ import MacroPage from './pages/MacroPage';
 import IndustryPage from './pages/IndustryPage';
 import StockPoolPage from './pages/StockPoolPage';
 import WatchlistPage from './pages/WatchlistPage';
+import ResearchModal from './components/ResearchModal';
 import { useAppStore } from './store';
 
 const pages: Record<string, React.FC> = {
@@ -22,24 +23,30 @@ export default function App() {
   const PageComponent = pages[currentPage] || MacroPage;
 
   return (
-    <div className="h-screen flex bg-gray-950 text-gray-100">
-      <Sidebar />
-      <div className="flex-1 flex flex-col min-w-0">
-        {/* Top bar */}
-        <div className="h-10 border-b border-gray-800 flex items-center justify-between px-4 bg-gray-900/50 flex-shrink-0">
-          <MarketStatus />
-          <div className="text-xs text-gray-600">
-            股票研究看板 v2.0
-          </div>
+    <div className="h-screen flex flex-col" style={{ backgroundColor: '#fafafa', color: '#1a1a1a' }}>
+      {/* Top bar */}
+      <div className="h-12 flex items-center justify-between px-4 flex-shrink-0 bg-gradient-red shadow-md" style={{ borderBottom: '2px solid #9b1a2e' }}>
+        <div className="flex items-center gap-3">
+          <span className="text-xl font-bold text-white tracking-wider" style={{ fontFamily: '"KaiTi", "STKaiti", serif' }}>光明宗</span>
+          <span className="text-xs text-red-100 opacity-80">股票研究看板 v2.4</span>
         </div>
-        {/* Page content */}
-        <div className="flex-1 overflow-y-auto">
-          <PageComponent />
+        <div className="flex items-center gap-4">
+          <MarketStatus />
         </div>
       </div>
-      <RightPanel />
+
+      {/* Main */}
+      <div className="flex flex-1 min-h-0">
+        <Sidebar />
+        <div className="flex-1 min-w-0 overflow-y-auto">
+          <PageComponent />
+        </div>
+        <RightPanel />
+      </div>
+
       <KlineModal />
       <SettingsModal />
+      <ResearchModal />
     </div>
   );
 }

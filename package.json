@@ -1,6 +1,6 @@
 {
   "name": "stock-dashboard",
-  "version": "2.3.0",
+  "version": "2.4.0",
   "description": "个人股票复盘网站 - A股/港股研究看板",
   "type": "module",
   "main": "electron/main.js",
