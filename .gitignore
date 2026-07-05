@@ -2,6 +2,8 @@ node_modules/
 dist/
 release/
 data/dashboard.db
+data/dashboard.db-shm
+data/dashboard.db-wal
 logs/
 .env
 .DS_Store
